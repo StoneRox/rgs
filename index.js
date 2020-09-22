@@ -3,7 +3,7 @@ let app = express();
 app.use('/static', express.static('public'));
 let https = require('https').createServer(app);
 let io = require('socket.io')(https);
-let port = 80;
+let port = process.env.PORT || 3000;
 let gameId = 1;
 let games = [];
 let startedGames = [];
