@@ -1,9 +1,9 @@
 let express = require('express');
 let app = express();
 app.use('/static', express.static('public'));
-let http = require('http').createServer(app);
-let io = require('socket.io')(http);
-let port = 82;
+let https = require('https').createServer(app);
+let io = require('socket.io')(https);
+let port = 80;
 let gameId = 1;
 let games = [];
 let startedGames = [];
@@ -129,7 +129,7 @@ io.on('connection', (socket) => {
 	});
 });
 
-http.listen(port, () => {
+https.listen(port, () => {
 	console.log('listening on *:' + port);
 });
 function createGame(creator) {
