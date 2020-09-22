@@ -13,7 +13,6 @@ body{
 }
 #gameFrame{
     height: 100vh;
-    width: 56vh;
     border: none;
 }
 #game{
