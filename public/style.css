@@ -1,0 +1,20 @@
+body{
+	overflow: hidden;
+}
+#content {
+	display: none;
+}
+#content.logged{
+	display: block;
+}
+#gameFrame{
+	position: absolute;
+    left: 0px;
+    top: 0;
+}
+#game{
+	display: none;
+}
+#game.block{
+	display: block;
+}

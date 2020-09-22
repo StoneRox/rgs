@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Play it cool</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/static/index.js"></script>
+	<link rel="stylesheet" type="text/css" href="/static/style.css">
+</head>
+<body>
+	<div id="usernamePicker">
+		<label>Username</label>
+		<input type="text" id="username">
+		<button id="login">Login</button>
+		<span id="userError"></span>
+	</div>
+	<div id="content">
+		<div id="userStats">
+			<span id="user"></span>
+			<button id="createGame">Create game</button>
+		</div>
+		<div>
+			<div>Games:</div>
+			<ul id="games"></ul>
+		</div>
+		<div id="game">
+			<iframe src="" id="gameFrame" width="750" height="1334"></iframe>
+		</div>
+	</div>
+</body>
+</html>
