@@ -17,20 +17,15 @@
 		stage.y = (window.innerHeight - (1334 * stage.scale.y)) / 2;
 	}
 	function init() {
-		const app = new PIXI.Application({width: 750, height: 1334, backgroundColor: 0x1099bb, resizeTo: window});
+		const app = new PIXI.Application({width: 750, height: 1334, backgroundColor: 0x1099bb});
 		document.body.appendChild(app.view);
 		window.addEventListener('resize', () => {resize(app.stage);});
 		resize(app.stage);
 		const stage = new PIXI.Container();
-		window.stage = stage;
 		gameState.stage = stage;
-		// stage.x = -app.stage.x;
-		// stage.y = -app.stage.y;
 		app.stage.addChild(stage);
 		let Grid = new Widgets.Grid(tileSize);
 		let Dice = new Widgets.Dice(gameState);
-		window.Grid = Grid;
-		window.Dice = Dice;
 		stage.addChild(Grid,Dice);
 		let pawns = [
 			{color: 'red', colorValue: 0xff4040},

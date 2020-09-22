@@ -101,7 +101,7 @@ io.on('connection', (socket) => {
 				if (playerIndex >= 0) {
 					game.players.splice(playerIndex,1);
 				}
-				if(game.players.length === 1) {
+				if(game.players.length === 0) {
 					let openGamesIndex = games.indexOf(game);
 					let startedGamesIndex = startedGames.indexOf(game);
 					if (openGamesIndex >= 0) {

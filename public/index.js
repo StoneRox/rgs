@@ -7,7 +7,9 @@ function init() {
 		console.log(msg);
 	});
 	login.addEventListener('click', () => {
-		socket.emit('login', username.value);
+		if (username.value) {
+			socket.emit('login', username.value);
+		}
 	});
 	createGame.addEventListener('click', () => {
 		if (loggedIn && !gameJoined) {
@@ -34,6 +36,8 @@ function init() {
 	socket.on('gameCreated', onGameCreated);
 	socket.on('openGame', function (data) {
 		if (data.success === true) {
+			lobby.classList.add('hide');
+			document.body.classList.add('game-started');
 			showGameFrame(data.players);
 		}
 	});
@@ -66,7 +70,7 @@ function init() {
 		listItem.id = 'game' + game.id;
 		let joinGameButton = document.createElement('span');
 		listItem.appendChild(joinGameButton);
-		joinGameButton.innerText = JSON.stringify(game.players.map(p => p.username));
+		joinGameButton.innerText = JSON.stringify(game.players.map(p => p.username)).replace(/"/g,'');
 		listItem.addEventListener('click', () => {
 			socket.emit('joinGame',game.id);
 		});
@@ -78,8 +82,24 @@ function init() {
 	function showGameFrame(players) {
 		gameFrame.src = '/static/playitcool';
 		document.getElementById('game').classList.add('block');
+		let gameLoaded = false;
+		let loadingScreenFinished = false;
+		loadingScreen.classList.add('active');
+		setTimeout(() => {
+			loadingCircles.classList.add('active');
+			setTimeout(() => {
+				loadingScreenFinished = true;
+				if (gameLoaded) {
+					loadingScreen.classList.remove('active');
+				}
+			}, 3500);
+		}, 100);
 		gameFrame.addEventListener('load', () => {
 			postMessageToGame('openGame',{players: players, currentPlayer: user.innerText});
+			gameLoaded = true;
+			if (loadingScreenFinished) {
+				loadingScreen.classList.remove('active');
+			}
 		});
 	}
 	window.addEventListener('message', (message) => {
