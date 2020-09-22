@@ -1,8 +1,8 @@
 let express = require('express');
 let app = express();
 app.use('/static', express.static('public'));
-let https = require('https').createServer(app);
-let io = require('socket.io')(https);
+let http = require('http').createServer(app);
+let io = require('socket.io')(http);
 let port = process.env.PORT || 3000;
 let gameId = 1;
 let games = [];
@@ -88,9 +88,9 @@ let events = {
 		});
 	}
 }
-app.get('/', function(req,res) {
-	res.sendFile(__dirname + '/index.html');
-});
+ app.get("/",function (req, res) {
+  res.sendFile(__dirname + "/index.html")
+}); 
 
 io.on('connection', (socket) => {
 	socket.on('disconnect', () => {
@@ -129,7 +129,7 @@ io.on('connection', (socket) => {
 	});
 });
 
-https.listen(port, () => {
+http.listen(port, () => {
 	console.log('listening on *:' + port);
 });
 function createGame(creator) {
