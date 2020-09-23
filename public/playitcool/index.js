@@ -10,19 +10,20 @@
 	let tileSize = 48;
 	let gameInitialized = false;
 	let initialPlayerData;
-	function resize(stage) {
-		let currentRatio = window.innerWidth / 750;
-		stage.scale.set(currentRatio);
-		stage.x = (window.innerWidth - (750 * stage.scale.x)) / 2;
-		stage.y = (window.innerHeight - (1334 * stage.scale.y)) / 2;
+	function resize(app) {
+		let scaleX = app.view.offsetHeight / 1334;
+		app.stage.scale.x = scaleX;
+		app.stage.x = (750 * (1-scaleX)) / 2;
 	}
 	function init() {
 		const app = new PIXI.Application({width: 750, height: 1334, backgroundColor: 0x1099bb});
 		document.body.appendChild(app.view);
-		window.addEventListener('resize', () => {resize(app.stage);});
-		resize(app.stage);
+		window.addEventListener('resize', () => {resize(app);});
+		resize(app);
 		const stage = new PIXI.Container();
 		gameState.stage = stage;
+		window.app = app;
+		window.stage = stage;
 		app.stage.addChild(stage);
 		let Grid = new Widgets.Grid(tileSize);
 		let Dice = new Widgets.Dice(gameState);

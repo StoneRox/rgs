@@ -13,11 +13,6 @@
 			this.remainingRolls = 0;
 			this.pawnsEnabled = 0;
 			this.setListeners();
-			this.gameData = {
-				moves:  [
-					{color: 'red', moves: [{roll: 6, pawn: 1},{roll: 3, pawn: 1}]}
-				]
-			};
 		}
 		enableDice(color,skipIncrement) {
 			this.rollTrigger.visible = true;
@@ -54,12 +49,13 @@
 				this.remainingRolls--;
 			}
 			this.rollTrigger.visible = false;
-			this.rollInstance = new PIXI.AnimatedSprite(loadedAssets.gameSprite.animations['roll_dice']);
-			this.rollInstance.gotoAndPlay(0);
+			let rollInstance = new PIXI.AnimatedSprite(loadedAssets.gameSprite.animations['roll_dice']);
+			rollInstance.gotoAndPlay(0);
 			this.gameState.turn.moves = rolledNumber;
 			this.gameState.turn.color = this.color;
 			Utils.delayedExecution(() => {
-				this.rollInstance.destroy();
+				rollInstance.visible = false;
+				rollInstance.destroy();
 				this.staticInstance = new PIXI.Sprite(loadedAssets['dice_end' + rolledNumber + '.png']);
 				this.addChild(this.staticInstance);
 				if (!+rollNumber) {
@@ -68,19 +64,13 @@
 					}
 					EventEmitter.emit('enableMoves',{color: this.color, moves: rolledNumber});
 					if (!this.remainingRolls && !this.pawnEnabled) {
-						// Utils.delayedExecution(() => {
-						// 	this.disableDice();
-						// }, 1);
 						Utils.delayedExecution(() => {
 							Utils.postMessage('playerTurnEnd');
 						}, 0.5);
 					}
 				} 
-				// else {
-				// 	EventEmitter.emit('otherPlayerMove',{color: this.color, moves: rolledNumber, pawnIndex: pawnIndex});
-				// }
 			}, Utils.getRandomInt(500,1000) / 1000);
-			this.addChild(this.rollInstance);
+			this.addChild(rollInstance);
 		}
 		setListeners() {
 			let events = {

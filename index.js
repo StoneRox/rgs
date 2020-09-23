@@ -124,7 +124,12 @@ io.on('connection', (socket) => {
 	});
 	Object.keys(events).forEach(eventName => {
 		socket.on(eventName, (msg) => {
-			events[eventName]({socket: socket, msg: msg});
+			try{
+				events[eventName]({socket: socket, msg: msg});
+			}
+			catch (err) {
+				console.error(err,err.stack);
+			}
 		});
 	});
 });
