@@ -102,8 +102,9 @@
 				'nextTurn': (data) => {
 					this.disableDice();
 					if (this.gameState.finished) {
-						this.enableDice(data.color);
 						Utils.postMessage('playerTurnEnd');
+					} else {
+						this.enableDice(data.color);
 					}
 				}
 			};

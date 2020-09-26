@@ -35,7 +35,7 @@
 			this.y = this.startTile.y + offsetY;
 			this.zIndex = 100;
 			let halfTileSize = (this.tileSize / 2) * (1/0.6);
-			this.hitArea = new PIXI.Polygon(-45, 45, 45, 45, 45, -45, -45, -45);
+			this.hitArea = new PIXI.Polygon(-50, 50, 50, 50, 50, -50, -50, -50);
 			Utils.onClick(this,() => {
 				if (gameState.player === this.color) {
 					Utils.postMessage('playerMove', {color: this.color, id: this.id});
