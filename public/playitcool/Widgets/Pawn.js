@@ -35,7 +35,7 @@
 			this.y = this.startTile.y + offsetY;
 			this.zIndex = 100;
 			let halfTileSize = (this.tileSize / 2) * (1/0.6);
-			this.hitArea = new PIXI.Polygon(-41, 0, 0, 33, 41, 0, 30, -83, 0, -108, -30, -83);
+			this.hitArea = new PIXI.Polygon(-45, 45, 45, 45, 45, -45, -45, -45);
 			Utils.onClick(this,() => {
 				if (gameState.player === this.color) {
 					Utils.postMessage('playerMove', {color: this.color, id: this.id});
@@ -54,6 +54,7 @@
 				}
 			});
 			this.interactive = false;
+			this.lastPlayerMove = Date.now();
 		}
 		movePawn(moves) {
 			if (moves && this.currentTile) {
@@ -100,6 +101,7 @@
 					EventEmitter.emit('pawnStopped', this);
 					this.checkEndStep();
 					EventEmitter.emit('moveEnded',this);
+					EventEmitter.emit('recalculateZOrder');
 				});
 				tile.arrangeTilePawns();
 			}
@@ -140,6 +142,9 @@
 			}
 			this.currentTile.arrangeTilePawns();
 			this.zIndex = this.y + 100;
+			if (this.currentTile.color && this.currentTile.index === 5 && this.currentTile.pawns.length === 4) {
+				this.gameState.finished = true;
+			}
 		}
 		enablePawn(data) {
 			if (data.color === this.color) {
@@ -188,9 +193,17 @@
 					this.enablePawn(data);
 				},
 				'playerMove': (data) => {
-					if (data.color === this.color && data.id === this.id) {
+					if (
+						Date.now() - this.lastPlayerMove > 500 &&
+						data.color === this.color &&
+						data.id === this.id
+					) {
+						this.lastPlayerMove = Date.now();
 						this.emit('click');
 					}
+				},
+				'recalculateZOrder': () => {
+					this.zIndex = this.y + 100;
 				}
 			};
 			EventEmitter.addListeners(events,this); 

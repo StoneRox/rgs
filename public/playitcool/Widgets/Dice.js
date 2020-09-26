@@ -95,20 +95,16 @@
 				'disablePawns': () => {
 					this.pawnEnabled = 0;
 				},
-				'otherPlayerRoll': (data) => {
-					this.enableDice(data.color);
-					this.roll(data.rollNumber,data.pawnIndex);
-				},
-				'otherPlayerMoveEnded': (pawn) => {
-
-				},
 				'playerRoll': (data) => {
 					this.enableDice(data.color);
 					this.roll(data.roll);
 				},
 				'nextTurn': (data) => {
 					this.disableDice();
-					this.enableDice(data.color);
+					if (this.gameState.finished) {
+						this.enableDice(data.color);
+						Utils.postMessage('playerTurnEnd');
+					}
 				}
 			};
 			EventEmitter.addListeners(events,this);

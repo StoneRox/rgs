@@ -11,20 +11,35 @@
 	let gameInitialized = false;
 	let initialPlayerData;
 	function resize(app) {
-		let scaleX = app.view.offsetHeight / 1334;
-		app.stage.scale.x = scaleX;
-		app.stage.x = (750 * (1-scaleX)) / 2;
+		let scaleX = app.view.offsetWidth/750;
+		let scaleY = app.view.offsetHeight/1334;
+		let scale = Math.min(scaleX,scaleY);
+        app.stage.scale.x = scale;
+        app.stage.scale.y = scale;
+		app.stage.x = (app.view.offsetWidth - app.stage.width) / 2;
+		app.stage.y = (app.view.offsetHeight - app.stage.height) / 2;
 	}
 	function init() {
-		const app = new PIXI.Application({width: 750, height: 1334, backgroundColor: 0x1099bb});
+		const app = new PIXI.Application({
+			width: screen.availWidth,
+			height: screen.availHeight,
+			backgroundColor: 0x1099bb,
+			resizeTo: window
+		});
 		document.body.appendChild(app.view);
 		window.addEventListener('resize', () => {resize(app);});
-		resize(app);
 		const stage = new PIXI.Container();
 		gameState.stage = stage;
 		window.app = app;
 		window.stage = stage;
 		app.stage.addChild(stage);
+		let stageFrameContainer = new PIXI.Container();
+		let stageFrame = new PIXI.Graphics();
+		stageFrame.lineStyle(4).lineTo(746,0).lineTo(746,1330).lineTo(0,1330).lineTo(0,0);
+		stageFrameContainer.addChild(stageFrame);
+		stageFrameContainer.cacheAsBitmap = true;
+		stageFrameContainer.alpha = 0;
+		stage.addChild(stageFrameContainer);
 		let Grid = new Widgets.Grid(tileSize);
 		let Dice = new Widgets.Dice(gameState);
 		stage.addChild(Grid,Dice);
@@ -67,7 +82,8 @@
 			setPlayerNames(initialPlayerData);
 		}
 		function setPlayerNames(data) {
-			if (data.players.length === 1) {
+			resize(app);
+			if (data && data.players.length === 1) {
 				let startButton = new PIXI.Sprite(loadedAssets['start_button']);
 				stage.addChild(startButton);
 				Utils.centerPivot(startButton);
